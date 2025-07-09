@@ -127,10 +127,12 @@ def fetch_wnba_data() -> Optional[Dict[str, Any]]:
     Returns:
         JSON data from the API or None if there's an error.
     """
+    from wnba_config import get_api_key
+    
     url = "https://wnba-api.p.rapidapi.com/wnbastandings"
     querystring = {"year": "2025", "group": "conference"}
     headers = {
-        "X-RapidAPI-Key": "a1dff23520mshe54eca80fd7e266p171832jsn90f79381d0b9",
+        "X-RapidAPI-Key": get_api_key(),
         "X-RapidAPI-Host": "wnba-api.p.rapidapi.com"
     }
 

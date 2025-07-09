@@ -1,38 +1,67 @@
 #!/usr/bin/env python3
+"""
+WNBA Standings Fetcher.
+
+This script fetches and displays WNBA standings for the 2025 season.
+It uses the wnba_dates module for accurate date calculations and season phase detection.
+"""
 
 import requests
 import argparse
-from datetime import datetime
+from datetime import datetime, date
 import sys
+import json
+from typing import List, Dict, Any, Optional
 
-# Function to determine the current week number
-def determine_week(start_date_str, current_date_str):
+# Import our custom date management module
+from wnba_dates import WNBADates2025
+
+
+def find_stat_by_name(stats: List[Dict[str, Any]], stat_name: str) -> Optional[Dict[str, Any]]:
     """
-    Calculate the week number in the WNBA season.
-
+    Find a stat by its name in the stats array.
+    
     Args:
-        start_date_str (str): The season's start date as a string (YYYY-MM-DD).
-        current_date_str (str): The current date as a string (YYYY-MM-DD).
-
+        stats: Array of stat dictionaries
+        stat_name: Name of the stat to find
+        
     Returns:
-        int: The current week number in the season.
+        The stat dictionary if found, None otherwise
     """
-    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
-    current_date = datetime.strptime(current_date_str, '%Y-%m-%d')
-    return ((current_date - start_date).days // 7) + 1
+    for stat in stats:
+        if stat.get('name') == stat_name:
+            return stat
+    return None
 
-# Function to process and format the standings
-def get_wnba_standings(json_data, group):
+
+def get_wnba_standings(json_data: Dict[str, Any], group: str, debug: bool = False) -> List[str]:
     """
     Process and return WNBA standings formatted by conference or league.
 
     Args:
-        json_data (dict): The API response containing standings data.
-        group (str): Either 'conference' or 'league', indicating how to group the standings.
+        json_data: The API response containing standings data.
+        group: Either 'conference' or 'league', indicating how to group the standings.
+        debug: If True, print debug information about the data structure.
 
     Returns:
-        list: A list of formatted strings representing the standings.
+        A list of formatted strings representing the standings.
     """
+    if debug:
+        print("DEBUG: API Response Structure:")
+        print(json.dumps(json_data, indent=2)[:2000] + "...")
+        print("\nDEBUG: First conference structure:")
+        if json_data.get('children') and len(json_data['children']) > 0:
+            first_conf = json_data['children'][0]
+            print(json.dumps(first_conf, indent=2)[:1000] + "...")
+            if first_conf.get('standings', {}).get('entries') and len(first_conf['standings']['entries']) > 0:
+                first_entry = first_conf['standings']['entries'][0]
+                print("\nDEBUG: First team entry structure:")
+                print(json.dumps(first_entry, indent=2)[:1000] + "...")
+                if first_entry.get('stats'):
+                    print("\nDEBUG: Stats array:")
+                    for i, stat in enumerate(first_entry['stats']):
+                        print(f"  [{i}] {stat}")
+
     standings = {"Eastern Conference": [], "Western Conference": []}
 
     for conference in json_data['children']:
@@ -42,28 +71,45 @@ def get_wnba_standings(json_data, group):
         else:
             print(f"Unexpected conference name: {conference_name}")
 
+    def get_team_stats(entry):
+        """Helper function to extract team stats safely."""
+        wins_stat = find_stat_by_name(entry['stats'], 'wins')
+        losses_stat = find_stat_by_name(entry['stats'], 'losses')
+        games_behind_stat = find_stat_by_name(entry['stats'], 'gamesBehind')
+        
+        wins = int(wins_stat['value']) if wins_stat else 0
+        losses = int(losses_stat['value']) if losses_stat else 0
+        games_behind = float(games_behind_stat['value']) if games_behind_stat else 0.0
+        
+        return wins, losses, games_behind
+
+    def sort_key(entry):
+        """Helper function for sorting teams."""
+        wins, losses, _ = get_team_stats(entry)
+        return (wins, -losses)
+
     output_lines = []
     if group == "league":
         all_entries = standings["Eastern Conference"] + standings["Western Conference"]
-        all_entries.sort(key=lambda x: (int(x['stats'][11]['value']), -int(x['stats'][6]['value'])), reverse=True)
+        all_entries.sort(key=sort_key, reverse=True)
+        
         for entry in all_entries:
             abbreviation = entry['team']['abbreviation']
             short_name = entry['team']['shortDisplayName']
-            wins = int(entry['stats'][11]['value'])
-            losses = int(entry['stats'][6]['value'])
-            games_behind = float(entry['stats'][4]['value'])  # Using the 'gamesbehind' key
+            wins, losses, games_behind = get_team_stats(entry)
+            
             team_info = f"{abbreviation} {short_name}".ljust(15)
             output_lines.append(f"{team_info} {wins:<2} - {losses:<2} GB: {games_behind:.1f}")
     else:
         for conference, entries in standings.items():
             output_lines.append(f"{conference}:")
-            entries.sort(key=lambda x: (int(x['stats'][11]['value']), -int(x['stats'][6]['value'])), reverse=True)
+            entries.sort(key=sort_key, reverse=True)
+            
             for entry in entries:
                 abbreviation = entry['team']['abbreviation']
                 short_name = entry['team']['shortDisplayName']
-                wins = int(entry['stats'][11]['value'])
-                losses = int(entry['stats'][6]['value'])
-                games_behind = float(entry['stats'][4]['value'])  # Using the 'gamesbehind' key
+                wins, losses, games_behind = get_team_stats(entry)
+                
                 team_info = f"{abbreviation} {short_name}".ljust(15)
                 output_lines.append(f"{team_info} {wins:<2} - {losses:<2} GB: {games_behind:.1f}")
             output_lines.append("")  # Add a blank line between conferences
@@ -73,75 +119,87 @@ def get_wnba_standings(json_data, group):
 
     return output_lines
 
-# Function to get the current season type
-def get_current_season_type(seasons, current_date_str):
-    """
-    Determines the current WNBA season type.
 
-    Args:
-        seasons (list): A list of seasons with start and end dates.
-        current_date_str (str): The current date as a string (YYYY-MM-DD).
+def fetch_wnba_data() -> Optional[Dict[str, Any]]:
+    """
+    Fetch WNBA standings data from the API.
 
     Returns:
-        tuple: The season type (str) and season year (str or None).
+        JSON data from the API or None if there's an error.
     """
-    current_date = datetime.strptime(current_date_str, '%Y-%m-%d')
-
-    for season in seasons:
-        for season_type in season['types']:
-            start_date = datetime.strptime(season_type['startDate'][:10], '%Y-%m-%d')
-            end_date = datetime.strptime(season_type['endDate'][:10], '%Y-%m-%d')
-            if start_date <= current_date <= end_date:
-                return season_type['name'], season['year']
-
-    return "Off Season", None
-
-# Main function to fetch data and display standings
-def main():
-    """
-    Main function to fetch WNBA standings and display them based on user input.
-    """
-    parser = argparse.ArgumentParser(description="Fetch WNBA standings.")
-    parser.add_argument('--group', type=str, choices=['league', 'conference'], default='conference', help='Group type: league or conference')
-    args = parser.parse_args()
-
     url = "https://wnba-api.p.rapidapi.com/wnbastandings"
-    querystring = {"year": "2024", "group": "conference"}  # Always fetch by conference
+    querystring = {"year": "2025", "group": "conference"}
     headers = {
         "X-RapidAPI-Key": "a1dff23520mshe54eca80fd7e266p171832jsn90f79381d0b9",
         "X-RapidAPI-Host": "wnba-api.p.rapidapi.com"
     }
 
     try:
-        response = requests.get(url, headers=headers, params=querystring)
-        response.raise_for_status()  # Raise an exception for bad HTTP status codes
+        response = requests.get(url, headers=headers, params=querystring, timeout=10)
+        response.raise_for_status()
+        return response.json()
     except requests.RequestException as e:
         print(f"Error fetching WNBA standings: {e}")
+        return None
+
+
+def main():
+    """
+    Main function to fetch WNBA standings and display them based on user input.
+    """
+    parser = argparse.ArgumentParser(description="Fetch WNBA standings for the 2025 season.")
+    parser.add_argument(
+        '--group', 
+        type=str, 
+        choices=['league', 'conference'], 
+        default='conference', 
+        help='Group type: league or conference'
+    )
+    parser.add_argument(
+        '--show-dates', 
+        action='store_true', 
+        help='Show the 2025 season schedule'
+    )
+    parser.add_argument(
+        '--debug', 
+        action='store_true', 
+        help='Show debug information about API response structure'
+    )
+    args = parser.parse_args()
+
+    # Show season dates if requested
+    if args.show_dates:
+        print("\n".join(WNBADates2025.get_season_summary()))
         return
 
-    json_data = response.json()
+    # Check if we're in the regular season
+    current_phase, week_num = WNBADates2025.get_current_phase()
+    
+    if not WNBADates2025.is_regular_season():
+        print(f"No results for WNBA Standings. Current phase: {current_phase}")
+        print("This script only runs during the regular season.")
+        return
+
+    # Fetch data from API
+    json_data = fetch_wnba_data()
+    if not json_data:
+        return
+
+    # Process and display standings
+    standings_lines = get_wnba_standings(json_data, args.group, args.debug)
+    if not standings_lines:
+        print("No standings data available.")
+        return
 
     current_date_str = datetime.now().strftime('%Y-%m-%d')
     current_time_str = datetime.now().strftime('%H:%M')
 
-    current_season_type, current_season_year = get_current_season_type(json_data['seasons'], current_date_str)
-
-    if current_season_type != "Regular Season":
-        print("No results for WNBA Standings. This only runs during the regular season. Exiting now.")
-        return
-
-    standings_lines = get_wnba_standings(json_data, args.group)
-    if not standings_lines:
-        return
-
-    week_number = determine_week("2024-05-14", current_date_str)
-
     print(f"\nWNBA standings for {current_date_str}:\n")
     for line in standings_lines:
         print(line)
-    print(f"\nSeason: {current_season_type} / wk: {week_number} - sent@{current_time_str}")
+    print(f"\nSeason: {current_phase} / wk: {week_num} - sent@{current_time_str}")
 
-# Call main function
+
 if __name__ == "__main__":
     main()
 

@@ -47,6 +47,7 @@ def fetch_wnba_schedule(target_date: date) -> Optional[Dict[str, Any]]:
             "X-RapidAPI-Key": get_api_key(),
             "X-RapidAPI-Host": "wnba-api.p.rapidapi.com"
         }
+
     try:
         response = requests.get(url, headers=headers, params=querystring, timeout=10)
         response.raise_for_status()

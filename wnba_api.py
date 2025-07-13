@@ -27,8 +27,8 @@ from wnba_dates import WNBADates2025
 from sports_api import fetch_sports_standings, fetch_sports_scores, fetch_sports_schedule, format_sports_standings
 from sports_config import get_season_info
 
-# Flask app for curl endpoints
-app = Flask(__name__)
+# Flask app for curl endpoints with static file support
+app = Flask(__name__, static_folder='static', static_url_path='')
 
 # FastAPI app for JSON endpoints
 fastapi_app = FastAPI(
@@ -682,6 +682,17 @@ def nhl_proxy(path):
 def nba_proxy(path):
     """Placeholder for NBA endpoints."""
     return f"NBA API endpoint /api/nba/{path} - Coming soon!"
+
+# Serve static files
+@app.route('/')
+def index():
+    """Serve the main web interface."""
+    return app.send_static_file('index.html')
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    """Serve static files (CSS, JS, etc.)."""
+    return app.send_static_file(filename)
 
 # Mount FastAPI app under Flask
 @app.route('/api/wnba/<path:path>')

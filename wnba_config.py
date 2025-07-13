@@ -31,7 +31,7 @@ def get_api_key() -> str:
     if api_key:
         return api_key
     
-    raise ValueError(
+        raise ValueError(
         "No API key found. Please set SPORTSBLAZE_API_KEY or WNBA_API_KEY "
         "in your .env file or environment variables."
     )

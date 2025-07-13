@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsPuff - Multi-Sport API</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">SportsPuff</h1>
+            <p class="tagline">Your Multi-Sport Data Hub</p>
+        </header>
+
+        <main class="main-content">
+            <div class="search-section">
+                <h2>Get Sports Data</h2>
+                <div class="search-form">
+                    <div class="form-group">
+                        <label for="sport-select">Sport:</label>
+                        <select id="sport-select" class="form-control">
+                            <option value="">Select a sport...</option>
+                            <option value="wnba">WNBA</option>
+                            <option value="nba">NBA</option>
+                            <option value="nfl">NFL</option>
+                            <option value="mlb">MLB</option>
+                            <option value="nhl">NHL</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data-type-select">Data Type:</label>
+                        <select id="data-type-select" class="form-control">
+                            <option value="">Select data type...</option>
+                            <option value="standings">Standings</option>
+                            <option value="scores">Scores</option>
+                            <option value="schedule">Schedule</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date-input">Date (optional):</label>
+                        <input type="date" id="date-input" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="season-input">Season (optional):</label>
+                        <input type="number" id="season-input" class="form-control" placeholder="2025" min="2020" max="2030">
+                    </div>
+
+                    <button id="search-btn" class="search-btn">Get Data</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section" style="display: none;">
+                <h3>Results</h3>
+                <div class="results-content" id="results-content">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <div class="api-info">
+                <h3>API Endpoints</h3>
+                <div class="endpoint-grid">
+                    <div class="endpoint-card">
+                        <h4>Human-Readable</h4>
+                        <p>Format: <code>/curl/{sport}/{type}</code></p>
+                        <p>Example: <code>/curl/wnba/standings</code></p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h4>JSON API</h4>
+                        <p>Format: <code>/api/{sport}/{type}</code></p>
+                        <p>Example: <code>/api/wnba/standings</code></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 SportsPuff - Multi-Sport Data API</p>
+        </footer>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html> 

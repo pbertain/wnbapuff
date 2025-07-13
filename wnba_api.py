@@ -244,7 +244,7 @@ def create_sports_endpoints(sport: str):
     """Create Flask endpoints for a specific sport."""
     
     @app.route(f'/curl/{sport}/help', endpoint=f'{sport}_help')
-    def sports_help(sport=sport):
+    def sports_help():
         """Display help information for sport endpoints."""
         help_text = f"""
 {sport.upper()} API - Curl Endpoints
@@ -271,7 +271,7 @@ Examples:
         return help_text
 
     @app.route(f'/curl/{sport}/standings', endpoint=f'{sport}_standings')
-    def sports_standings(sport=sport):
+    def sports_standings():
         """Display sport standings in human-readable format."""
         group = request.args.get('group', 'conference')
         if group not in ['conference', 'league']:
@@ -289,7 +289,7 @@ Examples:
         return output
 
     @app.route(f'/curl/{sport}/scores', endpoint=f'{sport}_scores')
-    def sports_scores(sport=sport):
+    def sports_scores():
         """Display sport scores in human-readable format."""
         date_str = request.args.get('date')
         if date_str:
@@ -312,7 +312,7 @@ Examples:
         return f"{sport.upper()} scores for {target_date.strftime('%Y-%m-%d')}:\nSeason: {season_info['name']} - {season_info['phase']}\n(Detailed formatting coming soon)"
 
     @app.route(f'/curl/{sport}/schedule', endpoint=f'{sport}_schedule')
-    def sports_schedule(sport=sport):
+    def sports_schedule():
         """Display sport schedule in human-readable format."""
         date_str = request.args.get('date')
         if date_str:

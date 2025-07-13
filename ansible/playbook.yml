@@ -63,6 +63,25 @@
         - "../README.md"
         - "../LICENSE"
         - "../seasons.json"
+        - "../dashboard_test.json"
+    
+    - name: Copy static web interface files
+      copy:
+        src: "../static/"
+        dest: "{{ app_dir }}/static/"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0644'
+        remote_src: false
+    
+    - name: Ensure static directory permissions
+      file:
+        path: "{{ app_dir }}/static"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0755'
+        recurse: yes
     
     - name: Copy configuration files
       copy:

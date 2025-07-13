@@ -2,7 +2,7 @@
 """
 WNBA Configuration Module.
 
-Handles API key loading from environment variables.
+Handles API key loading from environment variables for both RapidAPI and SportsBlaze.
 """
 
 import os
@@ -21,10 +21,31 @@ def get_api_key() -> str:
     Raises:
         ValueError: If no API key is found in environment variables
     """
+    # Try SportsBlaze API key first (preferred)
+    api_key = os.getenv('SPORTSBLAZE_API_KEY')
+    if api_key:
+        return api_key
+    
+    # Fallback to RapidAPI key for backward compatibility
     api_key = os.getenv('WNBA_API_KEY')
-    if not api_key:
-        raise ValueError(
-            "WNBA_API_KEY not found in environment variables. "
-            "Please set WNBA_API_KEY in your .env file or environment."
-        )
-    return api_key 
+    if api_key:
+        return api_key
+    
+    raise ValueError(
+        "No API key found. Please set SPORTSBLAZE_API_KEY or WNBA_API_KEY "
+        "in your .env file or environment variables."
+    )
+
+def get_api_type() -> str:
+    """
+    Determine which API type to use based on available environment variables.
+    
+    Returns:
+        'sportsblaze' if SPORTSBLAZE_API_KEY is set, 'rapidapi' otherwise
+    """
+    if os.getenv('SPORTSBLAZE_API_KEY'):
+        return 'sportsblaze'
+    elif os.getenv('WNBA_API_KEY'):
+        return 'rapidapi'
+    else:
+        raise ValueError("No API key found in environment variables") 

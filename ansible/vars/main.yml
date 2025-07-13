@@ -1,0 +1,31 @@
+# Application Configuration
+app_name: sportspuff
+app_user: www-data
+app_group: www-data
+app_dir: /opt/sportspuff
+app_port: 34080  # FastAPI port (main API)
+app_flask_port: 34081  # Flask port (human-readable)
+app_host: 0.0.0.0
+
+# Python Configuration
+python_version: "3.9"
+venv_path: "{{ app_dir }}/venv"
+
+# Nginx Configuration
+nginx_server_name: "{{ lookup('env', 'NGINX_SERVER_NAME') | default('sportspuff.local') }}"
+nginx_ssl_cert: "{{ lookup('env', 'NGINX_SSL_CERT') | default('') }}"
+nginx_ssl_key: "{{ lookup('env', 'NGINX_SSL_KEY') | default('') }}"
+
+# Sports API Credentials - Load from deployment.env
+# WNBA API (SportsBlaze preferred, RapidAPI fallback)
+wnba_sportsblaze_key: "{{ deployment_env.WNBA_SPORTSBLAZE_KEY | default('') }}"
+wnba_rapidapi_key: "{{ deployment_env.WNBA_RAPIDAPI_KEY | default('') }}"
+
+# Other sports API keys (when implemented)
+nba_api_key: "{{ deployment_env.NBA_API_KEY | default('') }}"
+nhl_api_key: "{{ deployment_env.NHL_API_KEY | default('') }}"
+mlb_api_key: "{{ deployment_env.MLB_API_KEY | default('') }}"
+nfl_api_key: "{{ deployment_env.NFL_API_KEY | default('') }}"
+
+# Application settings
+app_debug: "{{ lookup('env', 'APP_DEBUG') | default('false') }}" 

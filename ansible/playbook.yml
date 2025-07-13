@@ -1,0 +1,125 @@
+---
+- name: Deploy Sportspuff Multi-Sport API Server
+  hosts: sportspuff_servers
+  become: yes
+  vars_files:
+    - vars/main.yml
+
+  vars:
+    # Application configuration
+    app_name: sportspuff
+    app_user: sportspuff
+    app_group: sportspuff
+    app_dir: /opt/sportspuff
+    app_port: 34080
+    fastapi_port: 8001
+
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install required system packages
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+          - git
+          - curl
+        state: present
+      when: ansible_os_family == "Debian"
+
+  tasks:
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0755'
+    
+    - name: Create logs directory
+      file:
+        path: "{{ app_dir }}/logs"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0755'
+    
+    - name: Copy application files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ app_dir }}/"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0644'
+        remote_src: false
+      with_fileglob:
+        - "../*.py"
+        - "../requirements*.txt"
+        - "../README.md"
+        - "../LICENSE"
+        - "../seasons.json"
+    
+    - name: Copy configuration files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ app_dir }}/"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0644'
+        remote_src: false
+      with_fileglob:
+        - "../*.sh"
+    
+    - name: Copy environment example file
+      copy:
+        src: "../.env.example"
+        dest: "{{ app_dir }}/.env.example"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0644'
+        remote_src: false
+      ignore_errors: yes
+    
+    - name: Create Python virtual environment
+      pip:
+        virtualenv: "{{ app_dir }}/venv"
+        virtualenv_command: python3 -m venv
+        requirements: "{{ app_dir }}/requirements-api.txt"
+        state: present
+    
+    - name: Create systemd service file
+      template:
+        src: templates/sportspuff-api.service.j2
+        dest: /etc/systemd/system/sportspuff-api.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart sportspuff-api
+    
+    - name: Create environment file
+      template:
+        src: templates/environment.j2
+        dest: "{{ app_dir }}/.env"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0600'
+      notify: restart sportspuff-api
+    
+    - name: Enable and start sportspuff-api service
+      systemd:
+        name: sportspuff-api
+        enabled: yes
+        state: started
+        daemon_reload: yes
+          
+  handlers:
+    - name: restart sportspuff-api
+      systemd:
+        name: sportspuff-api
+        state: restarted
+        daemon_reload: yes 

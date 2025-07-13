@@ -1,0 +1,224 @@
+{
+  "timestamp": "2025-07-11T23:08:57.658006",
+  "sports": {
+    "wnba": {
+      "current_season": "2025",
+      "season_info": {
+        "sport": "wnba",
+        "season_year": "2025",
+        "name": "WNBA 2025",
+        "phase": "Regular Season",
+        "week": 9,
+        "api_base": "https://api.sportsblaze.com/v1/wnba",
+        "dates": {
+          "pre_season_start": "2025-05-02",
+          "regular_season_start": "2025-05-16",
+          "regular_season_end": "2025-09-11",
+          "playoffs_start": "2025-09-14",
+          "playoffs_end": "2025-10-19"
+        }
+      },
+      "progress": {
+        "sport": "wnba",
+        "season_year": "2025",
+        "season_name": "WNBA 2025",
+        "current_phase": "Regular Season",
+        "current_week": 9,
+        "overall_progress": 41.17647058823529,
+        "phase_progress": {
+          "percentage": 47.45762711864407,
+          "days_elapsed": 56,
+          "total_days": 118,
+          "days_remaining": 62
+        },
+        "next_phase": {
+          "phase": "Playoffs",
+          "start_date": "2025-09-14",
+          "days_until": 65
+        },
+        "days_elapsed": 70,
+        "total_days": 170,
+        "days_remaining": 100
+      },
+      "available_seasons": [
+        "2025",
+        "2026",
+        "2027",
+        "2028"
+      ]
+    },
+    "nba": {
+      "current_season": "2026",
+      "season_info": {
+        "sport": "nba",
+        "season_year": "2026",
+        "name": "NBA 2026-27",
+        "phase": "Off Season",
+        "week": null,
+        "api_base": "https://api.sportsblaze.com/v1/nba",
+        "dates": {
+          "pre_season_start": "2026-10-01",
+          "regular_season_start": "2026-10-21",
+          "regular_season_end": "2027-04-13",
+          "playoffs_start": "2027-04-19",
+          "playoffs_end": "2027-06-23"
+        }
+      },
+      "progress": {
+        "sport": "nba",
+        "season_year": "2026",
+        "season_name": "NBA 2026-27",
+        "current_phase": "Off Season",
+        "current_week": null,
+        "overall_progress": 0,
+        "phase_progress": {
+          "percentage": 0,
+          "days_elapsed": 0,
+          "total_days": 0
+        },
+        "next_phase": {
+          "phase": "Pre Season",
+          "start_date": "2026-10-01",
+          "days_until": 447
+        },
+        "days_elapsed": -447,
+        "total_days": 265,
+        "days_remaining": 712
+      },
+      "available_seasons": [
+        "2025",
+        "2026"
+      ]
+    },
+    "nhl": {
+      "current_season": "2026",
+      "season_info": {
+        "sport": "nhl",
+        "season_year": "2026",
+        "name": "NHL 2026-27",
+        "phase": "Off Season",
+        "week": null,
+        "api_base": "https://api.sportsblaze.com/v1/nhl",
+        "dates": {
+          "pre_season_start": "2026-09-15",
+          "regular_season_start": "2026-10-07",
+          "regular_season_end": "2027-04-19",
+          "playoffs_start": "2027-04-23",
+          "playoffs_end": "2027-06-15"
+        }
+      },
+      "progress": {
+        "sport": "nhl",
+        "season_year": "2026",
+        "season_name": "NHL 2026-27",
+        "current_phase": "Off Season",
+        "current_week": null,
+        "overall_progress": 0,
+        "phase_progress": {
+          "percentage": 0,
+          "days_elapsed": 0,
+          "total_days": 0
+        },
+        "next_phase": {
+          "phase": "Pre Season",
+          "start_date": "2026-09-15",
+          "days_until": 431
+        },
+        "days_elapsed": -431,
+        "total_days": 273,
+        "days_remaining": 704
+      },
+      "available_seasons": [
+        "2025",
+        "2026"
+      ]
+    },
+    "mlb": {
+      "current_season": "2025",
+      "season_info": {
+        "sport": "mlb",
+        "season_year": "2025",
+        "name": "MLB 2025",
+        "phase": "Regular Season",
+        "week": 16,
+        "api_base": "https://api.sportsblaze.com/v1/mlb",
+        "dates": {
+          "pre_season_start": "2025-02-15",
+          "regular_season_start": "2025-03-27",
+          "regular_season_end": "2025-09-28",
+          "playoffs_start": "2025-10-01",
+          "playoffs_end": "2025-11-05"
+        }
+      },
+      "progress": {
+        "sport": "mlb",
+        "season_year": "2025",
+        "season_name": "MLB 2025",
+        "current_phase": "Regular Season",
+        "current_week": 16,
+        "overall_progress": 55.51330798479087,
+        "phase_progress": {
+          "percentage": 57.2972972972973,
+          "days_elapsed": 106,
+          "total_days": 185,
+          "days_remaining": 79
+        },
+        "next_phase": {
+          "phase": "Playoffs",
+          "start_date": "2025-10-01",
+          "days_until": 82
+        },
+        "days_elapsed": 146,
+        "total_days": 263,
+        "days_remaining": 117
+      },
+      "available_seasons": [
+        "2025",
+        "2026"
+      ]
+    },
+    "nfl": {
+      "current_season": "2026",
+      "season_info": {
+        "sport": "nfl",
+        "season_year": "2026",
+        "name": "NFL 2026-27",
+        "phase": "Off Season",
+        "week": null,
+        "api_base": "https://api.sportsblaze.com/v1/nfl",
+        "dates": {
+          "pre_season_start": "2026-08-07",
+          "regular_season_start": "2026-09-04",
+          "regular_season_end": "2027-01-05",
+          "playoffs_start": "2027-01-11",
+          "playoffs_end": "2027-02-08"
+        }
+      },
+      "progress": {
+        "sport": "nfl",
+        "season_year": "2026",
+        "season_name": "NFL 2026-27",
+        "current_phase": "Off Season",
+        "current_week": null,
+        "overall_progress": 0,
+        "phase_progress": {
+          "percentage": 0,
+          "days_elapsed": 0,
+          "total_days": 0
+        },
+        "next_phase": {
+          "phase": "Pre Season",
+          "start_date": "2026-08-07",
+          "days_until": 392
+        },
+        "days_elapsed": -392,
+        "total_days": 185,
+        "days_remaining": 577
+      },
+      "available_seasons": [
+        "2025",
+        "2026"
+      ]
+    }
+  }
+}

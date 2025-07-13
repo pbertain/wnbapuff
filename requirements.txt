@@ -1,7 +1,7 @@
-flask==2.3.3
-fastapi==0.104.1
-uvicorn==0.24.0
-pydantic==2.5.0
-requests==2.31.0
-pytz==2023.3
-python-dotenv==1.1.0 
+# Core dependencies for WNBA scripts (scores, standings, schedule)
+requests>=2.31.0
+pytz>=2024.1
+python-dotenv>=1.1.0
+
+# Note: If you need to run the API server (wnba_api.py), 
+# install additional dependencies with: pip install -r requirements-api.txt 

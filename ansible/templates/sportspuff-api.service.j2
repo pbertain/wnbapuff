@@ -1,0 +1,31 @@
+[Unit]
+Description=Sportspuff Multi-Sport API Service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+Group={{ app_group }}
+WorkingDirectory={{ app_dir }}
+Environment=PATH={{ app_dir }}/venv/bin
+Environment=FLASK_APP={{ app_dir }}/wnba_api.py
+Environment=FLASK_ENV=production
+ExecStart={{ app_dir }}/venv/bin/python {{ app_dir }}/wnba_api.py --fastapi-port {{ app_port }} --port {{ app_flask_port }}
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths={{ app_dir }}/logs
+
+# Environment file
+EnvironmentFile={{ app_dir }}/.env
+
+[Install]
+WantedBy=multi-user.target 

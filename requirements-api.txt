@@ -1,0 +1,13 @@
+# Requirements for API server functionality (Flask/FastAPI)
+# Install these only if you need to run the API server
+
+# Core dependencies (same as minimal)
+requests>=2.31.0
+pytz>=2024.1
+python-dotenv>=1.1.0
+
+# Web framework dependencies (optional - only for API server)
+flask>=3.0.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+pydantic>=2.6.0 

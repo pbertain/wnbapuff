@@ -1,0 +1,133 @@
+{
+  "seasons": {
+    "wnba": {
+      "2025": {
+        "name": "WNBA 2025",
+        "pre_season_start": "2025-05-02",
+        "regular_season_start": "2025-05-16",
+        "regular_season_end": "2025-09-11",
+        "playoffs_start": "2025-09-14",
+        "playoffs_end": "2025-10-19",
+        "api_base": "https://api.sportsblaze.com/v1/wnba"
+      },
+      "2026": {
+        "name": "WNBA 2026",
+        "pre_season_start": "2026-05-02",
+        "regular_season_start": "2026-05-16",
+        "regular_season_end": "2026-09-11",
+        "playoffs_start": "2026-09-14",
+        "playoffs_end": "2026-10-19",
+        "api_base": "https://api.sportsblaze.com/v1/wnba"
+      },
+      "2027": {
+        "name": "WNBA 2027",
+        "pre_season_start": "2027-05-02",
+        "regular_season_start": "2027-05-16",
+        "regular_season_end": "2027-09-11",
+        "playoffs_start": "2027-09-14",
+        "playoffs_end": "2027-10-19",
+        "api_base": "https://api.sportsblaze.com/v1/wnba"
+      },
+      "2028": {
+        "name": "WNBA 2028",
+        "pre_season_start": "2028-05-02",
+        "regular_season_start": "2028-05-16",
+        "regular_season_end": "2028-09-11",
+        "playoffs_start": "2028-09-14",
+        "playoffs_end": "2028-10-19",
+        "api_base": "https://api.sportsblaze.com/v1/wnba"
+      }
+    },
+    "nba": {
+      "2025": {
+        "name": "NBA 2025-26",
+        "pre_season_start": "2025-10-01",
+        "regular_season_start": "2025-10-21",
+        "regular_season_end": "2026-04-13",
+        "playoffs_start": "2026-04-19",
+        "playoffs_end": "2026-06-23",
+        "api_base": "https://api.sportsblaze.com/v1/nba"
+      },
+      "2026": {
+        "name": "NBA 2026-27",
+        "pre_season_start": "2026-10-01",
+        "regular_season_start": "2026-10-21",
+        "regular_season_end": "2027-04-13",
+        "playoffs_start": "2027-04-19",
+        "playoffs_end": "2027-06-23",
+        "api_base": "https://api.sportsblaze.com/v1/nba"
+      }
+    },
+    "nhl": {
+      "2025": {
+        "name": "NHL 2025-26",
+        "pre_season_start": "2025-09-15",
+        "regular_season_start": "2025-10-07",
+        "regular_season_end": "2026-04-19",
+        "playoffs_start": "2026-04-23",
+        "playoffs_end": "2026-06-15",
+        "api_base": "https://api.sportsblaze.com/v1/nhl"
+      },
+      "2026": {
+        "name": "NHL 2026-27",
+        "pre_season_start": "2026-09-15",
+        "regular_season_start": "2026-10-07",
+        "regular_season_end": "2027-04-19",
+        "playoffs_start": "2027-04-23",
+        "playoffs_end": "2027-06-15",
+        "api_base": "https://api.sportsblaze.com/v1/nhl"
+      }
+    },
+    "mlb": {
+      "2025": {
+        "name": "MLB 2025",
+        "pre_season_start": "2025-02-15",
+        "regular_season_start": "2025-03-27",
+        "regular_season_end": "2025-09-28",
+        "playoffs_start": "2025-10-01",
+        "playoffs_end": "2025-11-05",
+        "api_base": "https://api.sportsblaze.com/v1/mlb"
+      },
+      "2026": {
+        "name": "MLB 2026",
+        "pre_season_start": "2026-02-15",
+        "regular_season_start": "2026-03-27",
+        "regular_season_end": "2026-09-28",
+        "playoffs_start": "2026-10-01",
+        "playoffs_end": "2026-11-05",
+        "api_base": "https://api.sportsblaze.com/v1/mlb"
+      }
+    },
+    "nfl": {
+      "2025": {
+        "name": "NFL 2025-26",
+        "pre_season_start": "2025-08-07",
+        "regular_season_start": "2025-09-04",
+        "regular_season_end": "2026-01-05",
+        "playoffs_start": "2026-01-11",
+        "playoffs_end": "2026-02-08",
+        "api_base": "https://api.sportsblaze.com/v1/nfl"
+      },
+      "2026": {
+        "name": "NFL 2026-27",
+        "pre_season_start": "2026-08-07",
+        "regular_season_start": "2026-09-04",
+        "regular_season_end": "2027-01-05",
+        "playoffs_start": "2027-01-11",
+        "playoffs_end": "2027-02-08",
+        "api_base": "https://api.sportsblaze.com/v1/nfl"
+      }
+    }
+  },
+  "settings": {
+    "auto_detect_season": true,
+    "default_season": "current",
+    "supported_sports": [
+      "wnba",
+      "nba",
+      "nhl",
+      "mlb",
+      "nfl"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+# Minimal requirements for core WNBA scripts (scores, standings, schedule)
+requests>=2.31.0
+pytz>=2024.1
+python-dotenv>=1.1.0 

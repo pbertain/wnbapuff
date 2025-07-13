@@ -137,12 +137,26 @@ celerybeat.pid
 # Environments
 .env
 .envrc
+deployment.env
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+# Additional virtual environment patterns
+.venv/
+venv/
+virtualenv/
+.venv.bak/
+venv.bak/
+virtualenv.bak/
+# Python virtual environment activation scripts
+activate
+activate.bat
+activate.fish
+activate.csh
+activate.ps1
 
 # Spyder project settings
 .spyderproject

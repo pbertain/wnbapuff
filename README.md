@@ -1,21 +1,39 @@
-# WNBA Standings Fetcher
+# SportsPuff - Multi-Sport API Server
 
-A Python script to fetch and display WNBA standings for the 2025 season with accurate date calculations and season phase detection.
+A Python API server that fetches and serves sports data for WNBA, NBA, NHL, MLB, and NFL with accurate date calculations, season phase detection, and dynamic season management.
 
 ## Features
 
-- **Accurate 2025 Season Dates**: Uses correct WNBA 2025 season dates for all calculations
-- **Modular Design**: Separate `wnba_dates.py` module for date management
-- **Season Phase Detection**: Automatically detects current season phase (Pre-Season, Regular Season, Playoffs, etc.)
-- **Week Number Calculation**: Calculates accurate week numbers for different season phases
-- **Flexible Output**: Display standings by conference or league-wide
+- **Multi-Sport Support**: WNBA, NBA, NHL, MLB, and NFL data
+- **Dynamic Season Management**: Automatic season detection and phase calculation
+- **Dual API Interface**: Human-readable curl endpoints and JSON API endpoints
+- **Season Analytics**: Progress tracking, milestone detection, and transition monitoring
+- **Interactive Dashboard**: CLI interface for season management and analytics
+- **Modular Design**: Separate modules for each sport and functionality
 - **PEP-8 Compliant**: Clean, well-documented code following Python best practices
 
 ## Files
 
-- `wnba_standings.py` - Main script for fetching and displaying standings
-- `wnba_scores.py` - Script for fetching and displaying today's WNBA scores
-- `wnba_dates.py` - Modular date management for WNBA 2025 season
+### Core API Server
+- `wnba_api.py` - Main API server with Flask and FastAPI endpoints
+- `sports_api.py` - Generic sports data fetching module
+- `sports_config.py` - Sports configuration and season management
+- `season_manager.py` - Dynamic season management and detection
+
+### Season Management
+- `manage_seasons.py` - Interactive season management utility
+- `season_analytics.py` - Season progress and milestone analytics
+- `season_transitions.py` - Season transition monitoring
+- `season_predictor.py` - Future season prediction
+- `season_dashboard.py` - Master CLI dashboard for all season tools
+- `seasons.json` - Season data configuration file
+
+### WNBA Modules
+- `wnba_standings.py` - WNBA standings fetching
+- `wnba_scores.py` - WNBA scores fetching
+- `wnba_schedule.py` - WNBA schedule fetching
+- `wnba_dates.py` - WNBA date management
+- `wnba_config.py` - WNBA configuration
 
 ## 2025 Season Schedule
 
@@ -181,31 +199,101 @@ curl "http://localhost:8001/api/schedule?target_date=2025-07-08"
 #### OpenAPI Documentation
 Visit `http://localhost:8001/docs` in your browser for interactive API documentation.
 
-### API Dependencies
+### Dependencies
 
-Install the required dependencies:
+#### Core Dependencies (Required)
+For the main WNBA scripts (scores, standings, schedule):
 ```bash
 pip install -r requirements.txt
 ```
 
+#### API Server Dependencies (Optional)
+If you want to run the API server (`wnba_api.py`):
+```bash
+pip install -r requirements-api.txt
+```
+
+**Note:** The API server dependencies include Flask, FastAPI, and Pydantic which may have compatibility issues with Python 3.13+. If you encounter installation errors, you can still use the core scripts without the API server.
+
 ### Environment Setup
 
-1. **Copy the example environment file:**
+1. **Create a `.env` file in the project root:**
    ```bash
-   cp .env.example .env
+   touch .env
    ```
 
-2. **Add your RapidAPI key to `.env`:**
+2. **Add your API key to `.env`:**
+   
+   **For SportsBlaze API (recommended):**
    ```
-   WNBA_API_KEY=your_actual_api_key_here
+   SPORTSBLAZE_API_KEY=your_actual_sportsblaze_api_key_here
+   ```
+   
+   **For RapidAPI (legacy support):**
+   ```
+   WNBA_API_KEY=your_actual_rapidapi_key_here
    ```
 
-3. **Get a RapidAPI key:**
+3. **Get an API key:**
+   
+   **SportsBlaze API (recommended):**
+   - Sign up at [SportsBlaze](https://sportsblaze.com)
+   - Subscribe to the WNBA API
+   - Copy your API key to the `.env` file as `SPORTSBLAZE_API_KEY`
+   
+   **RapidAPI (legacy):**
    - Sign up at [RapidAPI](https://rapidapi.com)
    - Subscribe to the WNBA API
-   - Copy your API key to the `.env` file
+   - Copy your API key to the `.env` file as `WNBA_API_KEY`
 
 **Important:** Never commit your `.env` file to version control. It's already in `.gitignore`.
+
+## Quick Setup and Testing
+
+### Option 1: Automated Setup (Recommended)
+```bash
+# Run the setup script to create virtual environment and install dependencies
+./setup_dev.sh
+
+# Activate the virtual environment
+source venv/bin/activate
+
+# Test your setup
+python3 test_setup.py
+```
+
+**If you encounter installation errors** (especially with pydantic-core on Python 3.13+):
+```bash
+# Run the fix script to resolve installation issues
+./fix_installation.sh
+```
+
+### Option 2: Manual Setup
+```bash
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Test your setup
+python3 test_setup.py
+```
+
+### Testing Your Setup
+After setting up your virtual environment and adding your API key to `.env`, run:
+```bash
+python3 test_setup.py
+```
+
+This will verify:
+- All required packages are installed
+- Your `.env` file exists and contains an API key
+- API configuration is working correctly
+- All scripts can be imported successfully
 
 ### Security Note
 
@@ -219,7 +307,13 @@ If you previously committed an API key to this repository, you can use the provi
 
 ## Scripts API
 
-The individual scripts use the WNBA API via RapidAPI. You may need to update the API key in the scripts if it expires.
+The individual scripts use the WNBA API via SportsBlaze (recommended) or RapidAPI (legacy support). The scripts automatically detect which API to use based on your environment variables:
+
+- If `SPORTSBLAZE_API_KEY` is set, it will use SportsBlaze API
+- If `WNBA_API_KEY` is set, it will use RapidAPI (legacy)
+- If neither is set, it will show an error message
+
+You may need to update the API key in your `.env` file if it expires.
 
 ## Improvements Made
 

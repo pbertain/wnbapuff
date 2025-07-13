@@ -127,14 +127,24 @@ def fetch_wnba_data() -> Optional[Dict[str, Any]]:
     Returns:
         JSON data from the API or None if there's an error.
     """
-    from wnba_config import get_api_key
+    from wnba_config import get_api_key, get_api_type
     
-    url = "https://wnba-api.p.rapidapi.com/wnbastandings"
-    querystring = {"year": "2025", "group": "conference"}
-    headers = {
-        "X-RapidAPI-Key": get_api_key(),
-        "X-RapidAPI-Host": "wnba-api.p.rapidapi.com"
-    }
+    api_type = get_api_type()
+    
+    if api_type == 'sportsblaze':
+        url = "https://api.sportsblaze.com/v1/wnba/standings"
+        querystring = {"season": "2025"}
+        headers = {
+            "Authorization": f"Bearer {get_api_key()}",
+            "Content-Type": "application/json"
+        }
+    else:  # rapidapi
+        url = "https://wnba-api.p.rapidapi.com/wnbastandings"
+        querystring = {"year": "2025", "group": "conference"}
+        headers = {
+            "X-RapidAPI-Key": get_api_key(),
+            "X-RapidAPI-Host": "wnba-api.p.rapidapi.com"
+        }
 
     try:
         response = requests.get(url, headers=headers, params=querystring, timeout=10)
